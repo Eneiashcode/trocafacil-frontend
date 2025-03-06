@@ -9,7 +9,9 @@ export default function Signup() {
   });
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+
+  // Definir a URL do backend corretamente (usando variável de ambiente ou localhost)
+  const API_URL = process.env.REACT_APP_BACKEND_URL || "https://trocafacil-backend.onrender.com/";
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -18,39 +20,33 @@ export default function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validação antes de enviar
     if (!formData.nome || !formData.email || !formData.senha) {
-      setError("⚠️ Preencha todos os campos obrigatórios!");
+      alert("Preencha todos os campos obrigatórios!");
       return;
     }
 
-    setLoading(true); // Desativa botão enquanto processa
-    setError(""); // Limpa mensagens de erro anteriores
+    setLoading(true);
 
     try {
-      const response = await fetch("https://trocafacil-backend.onrender.com/signup", {
+      const response = await fetch(`${API_URL}/signup`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
       const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.error || "Erro ao cadastrar usuário");
+      if (response.ok) {
+        alert("✅ Usuário cadastrado com sucesso!");
+        setFormData({ nome: "", email: "", senha: "", cidade: "" });
+      } else {
+        alert(data.error || "Erro ao cadastrar usuário");
       }
-
-      alert("✅ Usuário cadastrado com sucesso!");
-
-      // Limpa o formulário
-      setFormData({ nome: "", email: "", senha: "", cidade: "" });
     } catch (error) {
       console.error("🚨 Erro ao conectar ao backend:", error);
-      setError(error.message || "Erro ao conectar ao servidor.");
+      alert("Erro ao conectar ao servidor.");
     } finally {
-      setLoading(false); // Reativa o botão
+      setLoading(false);
     }
   };
 
@@ -58,8 +54,6 @@ export default function Signup() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <form className="bg-white p-6 rounded-lg shadow-md w-80" onSubmit={handleSubmit}>
         <h2 className="text-2xl font-bold text-purple-700 mb-4">Criar Conta</h2>
-
-        {error && <p className="text-red-600 text-sm mb-2">{error}</p>}
 
         <input
           type="text"
