@@ -10,8 +10,8 @@ export default function Signup() {
 
   const [loading, setLoading] = useState(false);
 
-  // Definir a URL do backend corretamente (usando variável de ambiente ou localhost)
-  const API_URL = process.env.REACT_APP_BACKEND_URL || "https://trocafacil-backend.onrender.com/";
+  // Definir a URL do backend corretamente
+  const API_URL = process.env.REACT_APP_BACKEND_URL || "https://trocafacil-backend.onrender.com";
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -28,7 +28,7 @@ export default function Signup() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_URL}/signup`, {
+      const response = await fetch(`${API_URL}/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

@@ -1,0 +1,25 @@
+# Ignorar dependências do Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Ignorar dependências do Python
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignorar arquivos de ambiente
+.env
+*.env
+
+# Ignorar builds do frontend
+frontend/build/
+frontend/node_modules/
+
+# Ignorar caches do editor e do sistema
+.DS_Store
+.idea/
+.vscode/
+*.swp
