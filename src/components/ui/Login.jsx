@@ -1,15 +1,13 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ Importado corretamente
 
 export default function Login() {
+  const navigate = useNavigate(); // ✅ Adicionado aqui
+
   const [formData, setFormData] = useState({
     email: "",
     senha: "",
   });
-
-  const [loading, setLoading] = useState(false);
-
-  // URL do backend (ajustando para ambiente local ou produção)
-  const API_URL = process.env.REACT_APP_BACKEND_URL || "https://trocafacil-backend.onrender.com";
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -17,37 +15,28 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!formData.email || !formData.senha) {
-      alert("Preencha todos os campos!");
-      return;
-    }
-
-    setLoading(true);
+    console.log("📨 Enviando login com:", formData);
 
     try {
-      const response = await fetch(`${API_URL}/auth/login`, {
+      const response = await fetch("http://127.0.0.1:10000/auth/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
+      console.log("🔍 Resposta do servidor:", response);
 
+      const data = await response.json();
       if (response.ok) {
         alert("✅ Login realizado com sucesso!");
-        // Aqui você pode redirecionar o usuário para a página principal
-        window.location.href = "/"; // Ajuste para a rota correta
+        localStorage.setItem("user", JSON.stringify(data.user));
+        navigate("/"); // ✅ Agora o navigate está definido!
       } else {
-        alert(data.error || "Erro ao fazer login.");
+        alert(data.error || "Erro ao fazer login");
       }
     } catch (error) {
       console.error("🚨 Erro ao conectar ao backend:", error);
       alert("Erro ao conectar ao servidor.");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -59,7 +48,7 @@ export default function Login() {
         <input
           type="email"
           name="email"
-          placeholder="E-mail *"
+          placeholder="E-mail"
           value={formData.email}
           onChange={handleChange}
           className="w-full p-2 mb-2 border rounded"
@@ -68,7 +57,7 @@ export default function Login() {
         <input
           type="password"
           name="senha"
-          placeholder="Senha *"
+          placeholder="Senha"
           value={formData.senha}
           onChange={handleChange}
           className="w-full p-2 mb-4 border rounded"
@@ -77,12 +66,9 @@ export default function Login() {
 
         <button
           type="submit"
-          className={`w-full p-2 rounded text-white ${
-            loading ? "bg-gray-500 cursor-not-allowed" : "bg-purple-700 hover:bg-purple-800"
-          }`}
-          disabled={loading}
+          className="w-full p-2 rounded text-white bg-purple-700 hover:bg-purple-800"
         >
-          {loading ? "Entrando..." : "Entrar"}
+          Entrar
         </button>
       </form>
     </div>

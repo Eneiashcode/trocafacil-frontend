@@ -11,7 +11,8 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
 
   // Definir a URL do backend corretamente
-  const API_URL = process.env.REACT_APP_BACKEND_URL || "https://trocafacil-backend.onrender.com";
+  const API_URL = process.env.REACT_APP_BACKEND_URL || "http://127.0.0.1:10000";
+
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
