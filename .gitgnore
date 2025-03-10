@@ -23,3 +23,8 @@ frontend/node_modules/
 .idea/
 .vscode/
 *.swp
+
+node_modules/
+build/
+.env
+
